@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.0.2"
+  },
+  "name": "21120544",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start1": "nodemon server-auth/index.js",
+    "start2": "nodemon server-game/index.js",
+    "start": "concurrently \"nodemon server-auth/index.js\" \"nodemon server-game/index.js \""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Flife11/21120544-4.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Flife11/21120544-4/issues"
+  },
+  "homepage": "https://github.com/Flife11/21120544-4#readme",
+  "description": ""
+}

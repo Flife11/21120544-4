@@ -1,0 +1,79 @@
+<body>
+    <div id="login">
+        <h3 class="text-center text-white pt-5">Đơn đăng ký</h3>
+        <div class="container">
+            <div id="login-row" class="row justify-content-center align-items-center">
+                <div id="login-column" class="col-md-6">
+                    <div id="login-box" class="col-md-12">
+                        <form  id="register-form" name="register" class="form" action="register/checkRegister" method="post">
+                            <h3 class="text-center text-info">Đăng ký</h3>
+                            <div class="form-group">
+                                <label for="username" class="text-info">Tài khoản:</label><br>
+                                <input type="text" name="username" id="username" class="form-control">
+                                <div id="userError" class="form-text text-warning"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="text-info">Mật khẩu:</label><br>
+                                <input type="password" name="password" id="password" class="form-control">
+                                <div id="passwordError" class="form-text text-warning"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword" class="text-info">Xác nhận mật khẩu:</label><br>
+                                <input type="password" name="confirmPassword" id="confirmPassword" class="form-control">
+                                <div id="confirmError" class="form-text text-warning"></div>
+                            </div>
+                            <div class="form-group">                                
+                                <button id="submit" class="btn btn-info btn-md">Đăng ký</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+            async function postFormDataAsJson({ url, formData }) {
+            const plainFormData = Object.fromEntries(formData.entries());
+            const formDataJsonString = JSON.stringify(plainFormData);
+
+            const fetchOptions = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: formDataJsonString,
+            };
+
+            const response = await fetch(url, fetchOptions);
+            
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(errorMessage);
+            }
+
+            return response.json();
+        }
+
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+
+            const form = event.currentTarget;
+            const url = form.action;
+
+            try {
+                const formData = new FormData(form);
+                const responseData = await postFormDataAsJson({ url, formData });
+                if (responseData.code===1) {
+                    $('#userError').html(responseData.error1);
+                    $('#confirmError').html(responseData.error3);                    
+                } else window.location.href = '/login';
+                
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        $("#register-form").on("submit", handleFormSubmit);
+</script>
