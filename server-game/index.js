@@ -8,7 +8,15 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const CustomError = require('./models/customErr');
+const cors = require('cors');
 
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED='0'
+var corsOptions = {
+    origin: '*',
+    optionsSuccessStatus: 200,
+}
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser("secret"))
@@ -17,7 +25,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false }
-}))
+}));
 
 require('./ulliti/passport')(app);
 
@@ -33,9 +41,9 @@ app.set('view engine', 'hbs');
 // app.use(express.static(__dirname + '/views'))
 app.use(router);
 
-app.use((err, req, res, next) => {
+app.use((err, req, res, next) => {   
     let sc = 500;
-    console.log(sc);
+    //console.log(sc);
     if (err instanceof CustomError) {
         sc = err.statusCode;
     }

@@ -64,14 +64,14 @@
 
             try {
                 const formData = new FormData(form);
-                const responseData = await postFormDataAsJson({ url, formData });
+                const responseData = await postFormDataAsJson({ url, formData });                
                 if (responseData.code===1) {
                     $('#userError').html(responseData.error1);
                     $('#confirmError').html(responseData.error3);                    
                 } else window.location.href = '/login';
                 
             } catch (error) {
-                console.error(error);
+                console.log(error);
             }
         }
 

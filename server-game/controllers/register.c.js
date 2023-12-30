@@ -1,6 +1,4 @@
 const User = require('../models/user.m');
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
 
 const RegisterRender = async (req, res, next) => {
     try {
@@ -16,8 +14,7 @@ const RegisterSubmit = async (req, res, next) => {
     try {
         const username = req.body.username;
         const password = req.body.password;
-        const confirmPassword = req.body.confirmPassword;
-
+        const confirmPassword = req.body.confirmPassword;                
         const rs = await fetch('https://localhost:3003/register', {
             method: 'post',
             headers: {
@@ -27,9 +24,9 @@ const RegisterSubmit = async (req, res, next) => {
                 "username": username,
                 "password": password,
                 "confirmPassword": confirmPassword
-            })  
+            })            
         });
-        const respond = rs.json();
+        const respond = await rs.json();        
     
         res.status(201).json(respond);
     } catch (error) {

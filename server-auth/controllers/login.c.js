@@ -1,6 +1,4 @@
 const User = require('../models/user.m');
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
 
 const LoginRender = async (req, res, next) => {      
     try {
@@ -16,7 +14,7 @@ const LoginSubmit = async (req, res, next) => {
     try {        
         const username = req.body.username;        
         
-        const databaseUser = User.Get(username, "Username");
+        const databaseUser = User.Get([username], ["Username"]);        
          
         res.status(201).json(databaseUser);
     } catch (error) {
@@ -24,4 +22,16 @@ const LoginSubmit = async (req, res, next) => {
     }
 }
 
-module.exports = {LoginRender, LoginSubmit};
+const SignInUpdate = async (req, res, next) => {
+    try {        
+        const username = req.body.username;
+        
+        User.UpdateSigninStatus([username], ["Username"]);        
+         
+        res.status(201).json({});
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = {LoginRender, LoginSubmit, SignInUpdate};

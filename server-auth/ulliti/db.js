@@ -1,51 +1,84 @@
-const data = require('./data.json');
 const FileSystem = require("fs");
+const data = require('../data.json');
 
 module.exports = {
-    checkExist: async (tbName, key, val) => {
+    checkExist: (tbName, key, val) => {
         try {
+            var flag = false;            
             data[tbName].forEach(d => {
-                if (d[key]==val) return true;
+                console.log(d[key], val, d[key]==val);
+                if (d[key]==val) {
+                    flag = true;
+                    return;
+                }
             })
-            return false;
+            return flag;
         } catch (error) {
             throw(error);
         }
     },
 
-    Get: async(tbName, colName, W_colName, W_val) => {
+    Get: (tbName, colName, W_colName, W_val) => {
         const res = [];
         data[tbName].forEach(d => {
             var flag = 1;
         
             for (var index in W_colName) {
-                if (d[W_colName[index]]==W_val[index]) continue;
+                //console.log(d[W_colName[index]], W_val[index], (d[W_colName[index]]==W_val[index]))
+                if (d[W_colName[index]]==W_val[index]) continue
                 else {
                     flag = 0;
                     break;
                 }
             }
-
+            //console.log(flag);
             if (flag==1) {
                 const tmp = {};
-                for (key in colName) {
-                    tmp.key = d.key;
+                for (key of colName) {
+                    tmp[key] = d[key];
                 }
+                //console.log(tmp);
                 res.push(tmp);
             }
         });
         return res;
     },
 
-    Add: async (tbName, colName, val) => {            
+    Add: (tbName, colName, val) => {            
         const tmp = {}
         colName.forEach(key => {
             tmp[key] = val[key];
         })
-        data[tbName].push(tmp);
-
-        FileSystem.writeFile('data.json', JSON.stringify(data), (error) => {
+        data[tbName].push(tmp);        
+        
+        FileSystem.writeFile('./data.json', JSON.stringify(data), (error) => {
             if (error) throw error;
-        });
-    }
+        });        
+    },
+
+    Update: (tbName, col, val, w_col, w_val) => {
+        const res = [];
+        for (d of data[tbName]) {
+            var flag = 1;
+        
+            for (var index in w_col) {                
+                if (d[w_col[index]]==w_val[index]) continue
+                else {
+                    flag = 0;
+                    break;
+                }
+            }
+            
+            if (flag==1) {                
+                for (key of colName) {
+                    d[col] = val;
+                }
+            }
+            res.push(d);
+        }
+        
+        FileSystem.writeFile('./data.json', JSON.stringify(res), (error) => {
+            if (error) throw error;
+        }); 
+    },
 }
