@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({path: './server-auth/.env'});
 const { create } = require('express-handlebars');
 const express = require('express');
 const app = express();
@@ -8,7 +8,6 @@ const bodyParser = require('body-parser');
 const https = require('https');
 const fs = require('fs');
 const cors = require("cors");
-console.log(port);
 //process.env.NODE_TLS_REJECT_UNAUTHORIZED='0'
 
 app.use(bodyParser.json());
@@ -32,18 +31,11 @@ app.set('view engine', 'hbs');
 
 app.use(router);
 
-// var fs = require("fs");
-
-// fs.readFile('./server-auth/img/img1.jpg', function(err, data) {
-  
-//     fs.writeFile('image.jpg', data, (err) => {
-//         console.log(err);
-//     })
-// });
-
 const server = https.createServer({
-    key: fs.readFileSync('./server-auth/certs/demo.key'),
-    cert: fs.readFileSync('./server-auth/certs/demo.cert')
+     //key: fs.readFileSync('./server-auth/certs/demo.key'),
+     //cert: fs.readFileSync('./server-auth/certs/demo.cert')
+    key: process.env.DEMO_KEY,
+    cert: process.env.DEMO_CERT
 }, app);
 
 server.listen(port, () => console.log(`Example app listening on port ${port}!`));

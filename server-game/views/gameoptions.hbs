@@ -1,0 +1,37 @@
+<div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">        
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Game options</h4>
+                </div>
+                <form action="http://localhost:21544/game/create/option" method="post" name="game-options" id="game-options"
+                    class="row mt-3">
+                    <input type="hidden" name="username" value="{{user.Username}}">
+                    <div class="col-md-12"><label class="labels">Full Name</label>
+                        <input name="Name" type="text" class="form-control" placeholder="enter full name"
+                            value="{{user.Name}}">
+                    </div>
+                    <div class="col-md-12"><label class="labels">Nickname</label>
+                        <input name="Nickname" type="text" class="form-control" placeholder="enter nickname"
+                            value="{{user.Nickname}}">
+                    </div>
+                    <div class="col-md-12"><label class="labels">X color</label>                        
+                        <input name="Xcolor" type="color" class="form-control"
+                            value="{{user.Xcolor}}">
+                    </div>
+                    <div class="col-md-12"><label class="labels">Y color</label>
+                        <input name="Ycolor" type="color" class="form-control"
+                            value="{{user.Ycolor}}">
+                    </div>
+                    <div class="col-md-12"><label class="labels">Board color</label>
+                        <input name="Boardcolor" type="color" class="form-control"
+                            value="{{user.Boardcolor}}">
+                    </div>
+                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit">Save
+                            Profile</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

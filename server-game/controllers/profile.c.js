@@ -9,10 +9,8 @@ const ProfileRender = async (req, res, next) => {
         })
         const data = await rs.json();
         //console.log(data);
-        if (!data.Image || (data.Image && data.Image.length==0)) {
-            data.Image = 'Profile.png';
-        } else {
-            //console.log(data.Image);
+        if (data.Image!='Profile.png') {
+            // console.log(data.Image, 22);
             const rs = await fetch('https://localhost:3003/get/Image', {
                 method: 'post',
                 headers: {
@@ -30,15 +28,16 @@ const ProfileRender = async (req, res, next) => {
             })
         }
 
-        data.Username = data.Username || '';
-        data.Nickname = data.Nickname || '';
-        data.Name = data.Name || '';
-        data.Image = data.Image || 'Profile.png';
+        // data.Username = data.Username || '';
+        // data.Nickname = data.Nickname || '';
+        // data.Name = data.Name || '';
+        // data.Image = data.Image || 'Profile.png';
 
         res.render('profile', {
             pcss: () => 'css/profileCSS',
             chatCSS: () => 'css/emptyCSS',
-            user: data
+            user: data,
+            noti: () => 'Choose new avatar'
         })
     } catch (error) {
         next(error);

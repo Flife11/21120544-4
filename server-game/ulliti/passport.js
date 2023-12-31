@@ -49,22 +49,7 @@ module.exports = app => {
         }
         if (u && auth) {
             auth = (u.Username==un)
-        }
-        if (u && auth) {
-            //console.log(u.Username, "log", auth);
-            if (u.Log==false) {
-                //console.log("signin");
-                const rs = await fetch('https://localhost:3003/login/signin', {
-                    method: 'post',
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        "username": un,
-                    })        
-                });
-            }
-        }
+        }        
         //console.log(u, 1);
         if (auth) {            
             return done(null, u);

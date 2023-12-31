@@ -1,20 +1,22 @@
 const db = require('../ulliti/db');
 //const tbName = 'Users';
-const getCol = ["Username", "Password", "Log", "Name", "Nickname", "Chesscolor", "Boardcolor", "Image"];
+const getCol = ["Username", "Password", "Log", "Name", "Nickname", "Xcolor", "Ycolor", "Boardcolor", "Image", "Score"];
 module.exports = class User {
     constructor(p) {
         this.Username = p.Username;
         this.Password = p.Password;
-        this.Log = p.Log;
-        this.Name = p.Name;
-        this.Nickname = p.Nickname;
-        this.Chesscolor = p.Chesscolor;
-        this.Boardcolor = p.Boardcolor;
-        this.Image = p.Image;
-        this.Score = p.Score;
+        this.Log = p.Log || false;
+        this.Name = p.Name || '';
+        this.Nickname = p.Nickname || '';
+        this.Xcolor = p.Xcolor || '#FF6347';
+        this.Ycolor = p.Ycolor || '#33DBFF';
+        this.Boardcolor = p.Boardcolor || '#FFFFFF';
+        this.Image = p.Image || 'Profile.png';
+        this.Score = p.Score || 0;
     }
 
     static checkExistsUser(user) {
+        console.log(user);
         const data = db.checkExist('Username', user.Username);
         //console.log(data)
         return data;
@@ -37,7 +39,7 @@ module.exports = class User {
     }
 
     static Add(user) {
-        db.Add(['Username', 'Password', "Log"], user);
+        db.Add([...getCol], new User(user));
     }
 
     static Update(col, val, w_col, w_val) {

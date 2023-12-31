@@ -1,11 +1,11 @@
 const {fetchFunction} = require('../ulliti/db');
+const Game = require('../models/game.m');
 const fs = require('fs');
 
 const getImage = async (data) => {
-    if (!data.Image || (data.Image && data.Image.length==0)) {        
-        data.Image = 'Profile.png';
-    } else {
-        //console.log(data.Image, 22);
+    //console.log(data);
+    if (data.Image!='Profile.png') {
+        // console.log(data.Image, 22);
         const rs = await fetch('https://localhost:3003/get/Image', {
             method: 'post',
             headers: {
@@ -25,27 +25,30 @@ const getImage = async (data) => {
 }
 
 const ProductRender = async (req, res, next) => {
-     try {
+     try {        
+        // Danh sách người chơi
         const rs1 = await fetchFunction('https://localhost:3003/get/all', {});
         const userList = await rs1.json();
-        userList.Users.forEach(u => {
-            //console.log(u);
+        userList.Users.forEach(u => {            
             getImage(u);
         });
-        // console.log(userList);
+        
+        // Nguời dùng hiện tại
         const rs2 = await fetchFunction('https://localhost:3003/login', {"username" :req.session.passport.user});
-        const user = await rs2.json();
-        if (!user.Image || (user.Image && user.Image.length==0)) {        
-            user.Image = 'Profile.png';
-        }
-        //console.log(user);
+        const user = await rs2.json();        
+        // Danh sách phong game
+        const roomList = Game.GetAll();
+        console.log(roomList);
+
         res.render('product', {
             pcss: () => 'css/productCSS',
             navbar: () => 'navbar',
             chatbox: () => 'chatbox',
             chatCSS: () => 'css/chatCSS',
-            userList: userList.Users,
-            user: user
+            // userList: userList.Users,
+            user: user,
+            roomList: roomList,
+            noti: 'Notice'
         })
      }
      catch(error) {

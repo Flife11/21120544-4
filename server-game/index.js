@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({path: './server-game/.env'});
 const { create } = require('express-handlebars');
 const express = require('express');
 const app = express();

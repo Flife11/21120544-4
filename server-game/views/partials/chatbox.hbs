@@ -1,13 +1,13 @@
-<div class="d-flex" style="width: 600px; height:400px;">
-    <div>
-        <p>Online player</p>
-        <ul class="list-group">        
+<div class="d-flex m-auto" style="width: 100%; height:400px;">
+    <div style="width: 150px;">
+        <p class="m-3">Online player</p>
+        <ul class="list-group online-list">
         </ul>
     </div>
     <p id="userhidden" style="display: none;">{{user.Username}}</p>
     <p id="imagehidden" style="display: none;">{{user.Image}}</p>
     <div>
-        <div id="chat-content" class="chat-messages p-4" style="width:300px; height:400px; overflow-y: scroll;" >            
+        <div id="chat-content" class="chat-messages p-4" style="width:400px; height:400px; overflow-y: scroll;">
         </div>
         <div class="flex-grow-0 py-3 px-4 border-top">
             <div class="input-group">
@@ -16,10 +16,24 @@
             </div>
         </div>
     </div>
+    <div class="m-5">
+        <h3>Game room list</h3>
+        <ul class="room-list container list-group" style="width: 500px">
+            {{#each roomList}}
+                <li class="list-group-item row">
+                    <div class="col">
+                        {{this.Host}}
+                    </div>
+                    <span class="col">vs</span>
+                    <div class="col">
+                        {{this.Guest}}
+                    </div>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
 </div>
-<div class="container d-fle">
-    
-</div>
+
 
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
@@ -49,13 +63,13 @@
                     ${u.Username}
                 </li>`
             })
-            $('.list-group').html(str.join(' '));
+            $('.online-list').html(str.join(' '));
         })
 
         socket.on('chat', chatList => {
             const str = chatList.map(c => {
                 const tmp = ''
-                if (c.Username==$('#userhidden').text()) {
+                if (c.Username == $('#userhidden').text()) {
                     return `<div class="chat-message-right pb-4">
                                 <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
                                     <div class="font-weight-bold mb-1">You</div>
@@ -72,6 +86,7 @@
             }).join(' ');
             $('#chat-content').html(str);
         })
+
         
     })
 </script>

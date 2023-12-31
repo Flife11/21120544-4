@@ -5,7 +5,7 @@ const LoginSubmit = async (req, res, next) => {
         const username = req.body.username;        
         
         const databaseUser = User.Get([username], ["Username"]);
-        //console.log(databaseUser);
+        //console.log(databaseUser)
          
         res.status(201).json(databaseUser);
     } catch (error) {

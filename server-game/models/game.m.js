@@ -1,8 +1,9 @@
 const data = require('../ulliti/data.json')
+const fs = require('fs');
 module.exports = class Game {
     constructor(p) {
         this.Host = p.Host;
-        this.Guess = p.Guess;        
+        this.Guest = p.Guest || '';        
     }    
     static checkExist(key, val) {
         try {            
@@ -26,7 +27,7 @@ module.exports = class Game {
         })
         data.push(tmp);        
         
-        FileSystem.writeFile('./server-game/ulliti/data.json', JSON.stringify(data), (error) => {
+        fs.writeFile('./server-game/ulliti/data.json', JSON.stringify(data), (error) => {
             if (error) throw error;
         });
     }
@@ -42,13 +43,13 @@ module.exports = class Game {
                 if (d[W_colName[index]]==W_val[index]) continue
                 else {
                     flag = 0;
-                    break;
+                    break;x
                 }
             }
             //console.log(flag);
             if (flag==1) {
                 const tmp = {};
-                for (key of colName) {
+                for (var key of colName) {
                     tmp[key] = d[key];
                 }
                 //console.log(tmp);
@@ -57,5 +58,9 @@ module.exports = class Game {
         });
         //console.log(res, "res");
         return res;
+    }
+
+    static GetAll() {
+        return data;
     }
 }

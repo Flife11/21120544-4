@@ -14,7 +14,7 @@ const RankRender = async (req, res, next) => {
         })
         userList.Users.sort((a, b) => {
             if (a.Score==b.Score) return 0;
-            if (a.Score<b.Score) return -1;
+            if (a.Score>b.Score) return -1;
             else return 1;
         })
         console.log(userList.Users);

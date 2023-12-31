@@ -1,21 +1,30 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">Navbar</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
         <a class="nav-link" href="/rank">Rank <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="/game">New Game <span class="sr-only">(current)</span></a>
+        <a href="/game/create" id="new-game" class="nav-link">New Game <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
+        <a id="my-game" href="/game" class="nav-link">My Game <span class="sr-only">(current)</span></a>
       </li>
     </ul>
     <a class="navbar-brand" href="/profile">
-    {{user.Username}}
-    <img style="width: 30px; height: 30px" src="{{user.Image}}" alt="img">
+      {{user.Username}}
+      <img style="width: 30px; height: 30px" src="{{user.Image}}" alt="img">
     </a>
   </div>
 </nav>
+
+{{> notification}}
+
+<script>  
+    
+</script>

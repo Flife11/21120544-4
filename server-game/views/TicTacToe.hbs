@@ -1,25 +1,77 @@
-<div class='flex'>
-    <div class='p1'>Player 1: 0</div>
-    <h1 class='header'>Tic Tac Toe</h1>
-    <div class='p2'>Player 2: 0</div>
+<div>
+    <div class='flex'>
+        <div class='p1'>{{host.Username}}: {{host.Score}}</div>
+        <h1 class='header'>Tic Tac Toe</h1>
+        <div class='p2'>{{guess.Username}}: {{guess.Score}}</div>
+    </div>
+    <div class='grid'>
+        <div class='space' id='one'></div>
+        <div class='space' id='two'></div>
+        <div class='space' id='three'></div>
+        <div class='space' id='four'></div>
+        <div class='space' id='five'></div>
+        <div class='space' id='six'></div>
+        <div class='space' id='seven'></div>
+        <div class='space' id='eight'></div>
+        <div class='space' id='nine'></div>
+    </div>
+
+    <div class='wrapper'>
+        <button class='reset'>Reset</button>
+    </div>
 </div>
-<div class='grid'>
-    <div class='space' id='one'></div>
-    <div class='space' id='two'></div>
-    <div class='space' id='three'></div>
-    <div class='space' id='four'></div>
-    <div class='space' id='five'></div>
-    <div class='space' id='six'></div>
-    <div class='space' id='seven'></div>
-    <div class='space' id='eight'></div>
-    <div class='space' id='nine'></div>
+<div style="position: absolute; top: 100px;">
+    <div id="chat-content" class="chat-messages p-4" style="width:300px; height:400px; overflow-y: scroll;">
+    </div>
+    <div class="flex-grow-0 py-3 px-4 border-top">
+        <div class="input-group">
+            <input type="text" id="text" class="form-control" placeholder="Type your message">
+            <button id="chat_button" class="btn btn-primary">Send</button>
+        </div>
+    </div>
 </div>
 
-<div class='wrapper'>
-    <button class='reset'>Reset</button>
-</div>
-
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
+    $(() => {
+        $('.space').css('background-color', `{{{host.Boardcolor}}}`);
+        const socket = new io();        
+        const un = '{{{host.Username}}}';
+        console.log(un, typeof(un));
+        
+        $('#chat_button').on('click', () => {
+            //console.log($('#text').val());
+            socket.emit(`${un}`, {
+                "Username": '{{{curUser}}}',
+                "msg": $('#text').val()              
+            });
+            $('#text').val('');
+            return false;
+        })
+        
+        socket.on(`${un}`, chatList => {
+            console.log(chatList);
+            const str = chatList.map(c => {
+                const tmp = ''
+                if (c.Username == un) {
+                    return `<div class="chat-message-right pb-4">
+                                <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                    <div class="font-weight-bold mb-1">You</div>
+                                    ${c.msg}
+                                </div>
+                            </div>`
+                }
+                return `<div class="chat-message-left pb-4">                
+                            <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                                <div class="font-weight-bold mb-1">${c.Username}</div>
+                                ${c.msg}
+                            </div>
+                        </div>`
+            }).join(' ');
+            $('#chat-content').html(str);
+        })
+    })
+
     let board = [
         [1, 2, 3],
         [4, 5, 6],
@@ -43,11 +95,11 @@
         }
 
         addSymbolX(space) {
-            $(space).append("<div class='x'>X</div>");
+            $(space).append(`<div style='color: {{{host.Xcolor}}}' class='x'>X</div>`);
         }
 
         addSymbolO(space) {
-            $(space).append("<div class='o'>O</div>");
+            $(space).append("<div style='color: {{{host.Ycolor}}}' class='o'>O</div>");
         }
     }
 

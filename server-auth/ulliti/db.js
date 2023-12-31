@@ -35,7 +35,7 @@ module.exports = {
             //console.log(flag);
             if (flag==1) {
                 const tmp = {};
-                for (key of colName) {
+                for (var key of colName) {
                     tmp[key] = d[key];
                 }
                 //console.log(tmp);

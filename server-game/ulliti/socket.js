@@ -1,21 +1,7 @@
 var onlineUsers = [];
 var chatContent = [];
-
-const checkExistUser = (arr, un) => {
-    let flag = 1;
-    arr.forEach(ar => {
-        if (ar.Username==un) flag = 0;
-    });
-    return flag;
-}
-
-const addUserToOnlineList = (user) => {
-    if (checkExistUser(onlineUsers, user)) onlineUsers.push(user);
-}
-
-const addUserToChatContent = (user) => {
-    if (checkExistUser(chatContent, user)) chatContent.push(user);
-}
+var roomChat = {};
+var DATA = require('../ulliti/data.json');
 
 module.exports = server => {
     const io = new require('socket.io')(server);
@@ -24,17 +10,25 @@ module.exports = server => {
         // Chat
         client.on('chat', data => {        
             //console.log(data.Username, data.msg);
-            addUserToChatContent(data);
+            chatContent.push(data);
             io.emit('chat', chatContent);
         });
 
         // Online list
-        client.on('online', user => {
-            // console.log(user.Username, user.Image);
+        client.on('online', user => {            
             ID = user;
-            addUserToOnlineList(user);
+            onlineUsers.push(user);
+            //console.log(user.Username, 1);
+            
             //console.log(onlineUsers);
             io.emit('online', onlineUsers);
+        })   
+        DATA.forEach(d => {
+            client.on(`${d.Host}`, u => {
+                if (roomChat[`${d.Host}`]==undefined) roomChat[`${d.Host}`] = [];
+                roomChat[`${d.Host}`].push(u);                                
+                io.emit(`${d.Host}`, roomChat[`${d.Host}`]);
+            })                    
         })
 
         client.on('disconnect', () => {

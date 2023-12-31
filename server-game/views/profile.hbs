@@ -25,6 +25,18 @@
                         <input name="Nickname" type="text" class="form-control" placeholder="enter nickname"
                             value="{{user.Nickname}}">
                     </div>
+                    <div class="col-md-12"><label class="labels">X color</label>                        
+                        <input name="Xcolor" type="color" class="form-control"
+                            value="{{user.Xcolor}}">
+                    </div>
+                    <div class="col-md-12"><label class="labels">Y color</label>
+                        <input name="Ycolor" type="color" class="form-control"
+                            value="{{user.Ycolor}}">
+                    </div>
+                    <div class="col-md-12"><label class="labels">Board color</label>
+                        <input name="Boardcolor" type="color" class="form-control"
+                            value="{{user.Boardcolor}}">
+                    </div>
                     <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit">Save
                             Profile</button></div>
                 </form>
@@ -36,8 +48,9 @@
 
 <script>
     $(() => {
-        $('#logout-button').on('click', async () => {            
+        $('#logout-button').on('click', async (e) => {            
             try {
+                e.preventDefault();
                 const rs = await fetch('http://localhost:21544/logout', {
                     method: 'post',
                     headers: {
@@ -93,7 +106,8 @@
 
         $("#profile-form").on("submit", handleFormSubmit);
 
-        $('#change-avatar').on('click', async () => {
+        $('#change-avatar').on('click', async (e) => {
+            e.preventDefault();
             const rs = await fetch('https://localhost:3003/get/Image');
             const data = await rs.json();
             //console.log(data);
@@ -104,6 +118,7 @@
             $('#image-list').html(string);
             // Cài đặt sự kiện chọn avatar mới
             $('.new-avatar').on('click', async (e) => {
+                e.preventDefault();
                 const url = $(e.currentTarget).text();
                 const username = $('#username').text();
                 //console.log(url, username);
