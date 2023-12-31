@@ -1,8 +1,10 @@
 const express = require('express');
-const { GetProfile } = require('../controllers/get.c');
+const { GetProfile, GetImageListName, GetProfileImage, GetAllUser } = require('../controllers/get.c');
 const router = express.Router();
 
 router.post('/profile', GetProfile);
-router.post('/profile', UpdateProfile);
+router.get('/Image', GetImageListName);
+router.post('/Image', GetProfileImage);
+router.post('/all', GetAllUser);
 
 module.exports = router;

@@ -1,54 +1,77 @@
-<div style="width: 400px; height:400px;">
-    <div id="chat-content" class="chat-messages p-4" >
-        <div class="chat-message-right pb-4">
-            <div>
-                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood"
-                    width="40" height="40">
-                <div class="text-muted small text-nowrap mt-2">2:33 am</div>
-            </div>
-            <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                <div class="font-weight-bold mb-1">You</div>
-                Lorem ipsum dolor sit amet, vis erat denique in, dicunt prodesset te vix.
+<div class="d-flex" style="width: 600px; height:400px;">
+    <div>
+        <p>Online player</p>
+        <ul class="list-group">        
+        </ul>
+    </div>
+    <p id="userhidden" style="display: none;">{{user.Username}}</p>
+    <p id="imagehidden" style="display: none;">{{user.Image}}</p>
+    <div>
+        <div id="chat-content" class="chat-messages p-4" style="width:300px; height:400px; overflow-y: scroll;" >            
+        </div>
+        <div class="flex-grow-0 py-3 px-4 border-top">
+            <div class="input-group">
+                <input type="text" id="text" class="form-control" placeholder="Type your message">
+                <button id="chat_button" class="btn btn-primary">Send</button>
             </div>
         </div>
+    </div>
+</div>
+<div class="container d-fle">
     
-        <div class="chat-message-left pb-4">
-            <div>
-                <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1"
-                    alt="Sharon Lessman" width="40" height="40">
-                <div class="text-muted small text-nowrap mt-2">2:34 am</div>
-            </div>
-            <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
-                <div class="font-weight-bold mb-1">Sharon Lessman</div>
-                Sit meis deleniti eu, pri vidit meliore docendi ut, an eum erat animal commodo.
-            </div>
-        </div>
-    </div>
-    <div class="flex-grow-0 py-3 px-4 border-top">
-        <div class="input-group">
-            <input type="text" id="text" class="form-control" placeholder="Type your message">
-            <button id="chat_button" class="btn btn-primary">Send</button>
-        </div>
-    </div>
 </div>
 
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
     $(() => {
         const socket = new io();
+        const onlSocket = new io();
         $('#chat_button').on('click', () => {
-            console.log($('#text').val());
-            socket.emit('chanel1', $('#text').val());
+            //console.log($('#text').val());
+            socket.emit('chat', {
+                "Username": $('#userhidden').text(),
+                "msg": $('#text').val()
+            });
             $('#text').val('');
             return false;
         })
-        socket.on('chanel1', msg => {
-            //var str = `<div class="media-body"> <p>$</p> </div>`
-            $('#chat-content').append($('<div>').addClass('chat-message-left pb-4').html(`
-                <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
-            <div class="font-weight-bold mb-1">Sharon Lessman</div>
-            ${msg}
-        </div>`));
+
+        // Hiển thị người chơi online
+        onlSocket.emit('online', {
+            "Username": $('#userhidden').text(),
+            "Image": $('#imagehidden').text()
         })
+        onlSocket.on('online', users => {
+            //console.log(users);
+            const str = users.map(u => {
+                return `<li class="list-group-item">
+                    <img style="width: 30px; height: 30px" src="${u.Image}" alt="img">
+                    ${u.Username}
+                </li>`
+            })
+            $('.list-group').html(str.join(' '));
+        })
+
+        socket.on('chat', chatList => {
+            const str = chatList.map(c => {
+                const tmp = ''
+                if (c.Username==$('#userhidden').text()) {
+                    return `<div class="chat-message-right pb-4">
+                                <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                    <div class="font-weight-bold mb-1">You</div>
+                                    ${c.msg}
+                                </div>
+                            </div>`
+                }
+                return `<div class="chat-message-left pb-4">                
+                            <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                                <div class="font-weight-bold mb-1">${c.Username}</div>
+                                ${c.msg}
+                            </div>
+                        </div>`
+            }).join(' ');
+            $('#chat-content').html(str);
+        })
+        
     })
 </script>

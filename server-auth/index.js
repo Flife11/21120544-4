@@ -32,6 +32,15 @@ app.set('view engine', 'hbs');
 
 app.use(router);
 
+// var fs = require("fs");
+
+// fs.readFile('./server-auth/img/img1.jpg', function(err, data) {
+  
+//     fs.writeFile('image.jpg', data, (err) => {
+//         console.log(err);
+//     })
+// });
+
 const server = https.createServer({
     key: fs.readFileSync('./server-auth/certs/demo.key'),
     cert: fs.readFileSync('./server-auth/certs/demo.cert')

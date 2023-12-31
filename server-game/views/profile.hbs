@@ -2,10 +2,11 @@
     <div class="row">
         <div class="col-md-3 border-right">
             <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                <img class="rounded-circle mt-5" width="150px" src="{{Image}}"><span id="username"
-                    class="font-weight-bold">{{username}}</span>
-                <span>{{name}}</span>
-                <span><button id="change-avatar">Change avatar</button></span>
+                <button style="text-decoration: none;" type="button" id="logout-button">Logout</button>
+                <img class="rounded-circle mt-5" width="150px" src="{{user.Image}}"><span id="username"
+                    class="font-weight-bold">{{user.Username}}</span>
+                <span>{{user.Name}}</span>
+                <button type="button" id="change-avatar">Change avatar</button>
             </div>
         </div>
         <div class="col-md-5 border-right">
@@ -15,16 +16,17 @@
                 </div>
                 <form action="https://localhost:3003/update/profile" method="post" name="profile-file" id="profile-file"
                     class="row mt-3">
-                    <input type="hidden" name="username" value="{{username}}">
+                    <input type="hidden" name="username" value="{{user.Username}}">
                     <div class="col-md-12"><label class="labels">Full Name</label>
-                        <input name="Name" type="text" class="form-control" placeholder="enter full name" value="{{Name}}">
+                        <input name="Name" type="text" class="form-control" placeholder="enter full name"
+                            value="{{user.Name}}">
                     </div>
                     <div class="col-md-12"><label class="labels">Nickname</label>
                         <input name="Nickname" type="text" class="form-control" placeholder="enter nickname"
-                            value="{{Nickname}}">
+                            value="{{user.Nickname}}">
                     </div>
-                <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit">Save
-                        Profile</button></div>
+                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit">Save
+                            Profile</button></div>
                 </form>
             </div>
         </div>
@@ -33,71 +35,90 @@
 {{> notification}}
 
 <script>
-    $('#select-button').on('click', () => {
-        const url = $('#select-button').id;
-        const username = $('#username').text();
-        const rs = await fetch('https://localhost:3003/update/icon', {
-            method: 'post',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "Image": url,
-                "username": username
-            })
-        });
-    })
-
-    async function postFormDataAsJson({ url, formData }) {
-        const plainFormData = Object.fromEntries(formData.entries());
-        const formDataJsonString = JSON.stringify(plainFormData);
-
-        const fetchOptions = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-            },
-            body: formDataJsonString,
-        };
-
-        const response = await fetch(url, fetchOptions);
-
-        if (!response.ok) {
-            const errorMessage = await response.text();
-            throw new Error(errorMessage);
-        }
-
-        return response.json();
-    }
-
-    async function handleFormSubmit(event) {
-        event.preventDefault();
-
-        const form = event.currentTarget;
-        const url = form.action;
-
-        try {
-            const formData = new FormData(form);
-            const responseData = await postFormDataAsJson({ url, formData });   
-            if (responseData.code==1) {
-                window.location.href = 'http://localhost:21544/profile';
+    $(() => {
+        $('#logout-button').on('click', async () => {            
+            try {
+                const rs = await fetch('http://localhost:21544/logout', {
+                    method: 'post',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                })
+                const res = await rs.json();
+                if (res && res.code==1) {
+                    window.location.href = 'http://localhost:21544/login'
+                }
             }
-        } catch (error) {
-            throw(error);
+            catch(error) {
+                console.log(error);
+            }
+        })
+
+        async function postFormDataAsJson({ url, formData }) {
+            const plainFormData = Object.fromEntries(formData.entries());
+            const formDataJsonString = JSON.stringify(plainFormData);
+
+            const fetchOptions = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: formDataJsonString,
+            };
+
+            const response = await fetch(url, fetchOptions);
+
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(errorMessage);
+            }
+
+            return response.json();
         }
-    }
 
-    $("#profile-form").on("submit", handleFormSubmit);   
+        async function handleFormSubmit(event) {
+            event.preventDefault();
 
+            const form = event.currentTarget;
+            const url = form.action;
 
-    $('.change-avatar').on('click', () => {
-        const rs = fetch('https://localhost:3003/get/Image');
-        const data = rs.json();
-        var string = data.map(d => {
-            return `<li>${d}</li>`
-        }).join(' ');
-        $('#myModal').css('display', '');
-        $('#myModal').html(string);
+            try {
+                const formData = new FormData(form);
+                const responseData = await postFormDataAsJson({ url, formData });
+            } catch (error) {
+                throw (error);
+            }
+        }
+
+        $("#profile-form").on("submit", handleFormSubmit);
+
+        $('#change-avatar').on('click', async () => {
+            const rs = await fetch('https://localhost:3003/get/Image');
+            const data = await rs.json();
+            //console.log(data);
+            var string = data.data.map(d => {
+                return `<button class="new-avatar">${d}</button>`
+            }).join(' ');
+            $('#myModal').css('display', '');
+            $('#image-list').html(string);
+            // Cài đặt sự kiện chọn avatar mới
+            $('.new-avatar').on('click', async (e) => {
+                const url = $(e.currentTarget).text();
+                const username = $('#username').text();
+                //console.log(url, username);
+                const rs = await fetch('https://localhost:3003/update/icon', {
+                    method: 'post',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "Image": url,
+                        "username": username
+                    })
+                })
+                window.location.href = 'http://localhost:21544/profile'
+            })
+        })
     })
 </script>

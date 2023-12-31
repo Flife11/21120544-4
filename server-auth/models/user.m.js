@@ -11,6 +11,7 @@ module.exports = class User {
         this.Chesscolor = p.Chesscolor;
         this.Boardcolor = p.Boardcolor;
         this.Image = p.Image;
+        this.Score = p.Score;
     }
 
     static checkExistsUser(user) {
@@ -31,6 +32,10 @@ module.exports = class User {
         return (new User(data[0]));
     }
 
+    static GetAll() {
+        return db.GetAll();
+    }
+
     static Add(user) {
         db.Add(['Username', 'Password', "Log"], user);
     }
@@ -39,7 +44,7 @@ module.exports = class User {
         db.Update(col, val, w_col, w_val);
     }
 
-    static UpdateSigninStatus(userCol, userVal) {
-        db.Update(["Log"], [true], [userCol], [userVal]);
+    static UpdateSigninStatus(status, userVal, userCol) {
+        db.Update(["Log"], [status], [userCol], [userVal]);
     }
 }

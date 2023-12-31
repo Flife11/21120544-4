@@ -1,0 +1,62 @@
+<div class="event-schedule-area-two bg-color pad100">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title text-center">
+                    <div class="title-text">
+                        <h2>Ranking</h2>
+                    </div>
+                </div>
+            </div>
+            <!-- /.col end-->
+        </div>
+        <!-- row end-->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="tab-pane fade active show" id="home" role="tabpanel">
+                    <div class="">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="" scope="col">#Order</th>
+                                    <th scope="col">Avatar</th>
+                                    <th scope="col">Name</th>
+                                    <th class="" scope="col">Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each data}}
+                                    <tr class="inner-box">
+                                        <th scope="row">
+                                            <div class="event-date">
+                                                <span>{{this.Index}}</span>                                    
+                                            </div>
+                                        </th>
+                                        <td>
+                                            <div class="event-img">
+                                                <img style="width: 70px; width:70px" 
+                                                src="{{this.Image}}" alt="" />
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="r-no">
+                                                <span>{{this.Username}}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="r-no">
+                                                <span>{{this.Score}}</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- /col end-->
+        </div>
+        <!-- /row end-->
+    </div>
+</div>

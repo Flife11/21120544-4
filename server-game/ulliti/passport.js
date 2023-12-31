@@ -51,7 +51,9 @@ module.exports = app => {
             auth = (u.Username==un)
         }
         if (u && auth) {
-            if (u.Log==true) {
+            //console.log(u.Username, "log", auth);
+            if (u.Log==false) {
+                //console.log("signin");
                 const rs = await fetch('https://localhost:3003/login/signin', {
                     method: 'post',
                     headers: {

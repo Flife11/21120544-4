@@ -6,7 +6,7 @@ const GetProfile = async (req, res, next) => {
         const username = req.body.username;
         
         const databaseUser = User.Get([username], ["Username"]);
-        console.log(databaseUser);
+        //console.log(databaseUser);
          
         res.status(201).json(databaseUser);
     } catch (error) {
@@ -25,13 +25,26 @@ const GetImageListName = async (req, res, next) => {
 const GetProfileImage = async (req, res, next) => {
     try {                
         const Image = req.body.Image;
-
-        fs.readFile(`./server-auth/img/${img1.jpg}`, function(err, data) {                        
-            res.status(201).json({"data": data});
-        });
-         
+        //console.log(Image, "image");
+        fs.readFile(`./server-auth/img/${Image}`, function(err, data) {                        
+            try {
+                //console.log(data);
+                res.status(201).json({"Image": data});
+            } catch (error) {
+                next(error)
+            }
+        });         
     } catch (error) {
         next(error);
     }
 }
-module.exports = {GetProfile, GetProfileImage, GetImageListName}
+
+const GetAllUser = async (req, res, next) => {
+    try {                
+        const all = User.GetAll();
+        res.status(201).json({"Users": all});
+    } catch (error) {
+        next(error);
+    }
+}
+module.exports = {GetProfile, GetProfileImage, GetImageListName, GetAllUser}

@@ -6,7 +6,7 @@ module.exports = {
         try {            
             var flag = false;            
             data.forEach(d => {
-                console.log(d[key], val, d[key]==val);
+                //console.log(d[key], val, d[key]==val);
                 if (d[key]==val) {
                     flag = true;
                     return;
@@ -20,7 +20,7 @@ module.exports = {
 
     Get: (colName, W_colName, W_val) => {
         const res = [];
-        console.log(colName, W_colName, W_val);
+        //console.log(colName, W_colName, W_val);
         data.forEach(d => {
             var flag = 1;
         
@@ -42,7 +42,7 @@ module.exports = {
                 res.push(tmp);
             }
         });
-        console.log(res, "res");
+        //console.log(res, "res");
         return res;
     },
 
@@ -55,7 +55,7 @@ module.exports = {
         
         FileSystem.writeFile('./data.json', JSON.stringify(data), (error) => {
             if (error) throw error;
-        });        
+        });
     },
 
     Update: (col, val, w_col, w_val) => {
@@ -78,10 +78,14 @@ module.exports = {
             }
             res.push(d);
         }
-        console.log(res);
+        //console.log(res);
 
         FileSystem.writeFile('./data.json', JSON.stringify(res), (error) => {
             if (error) throw error;
         }); 
     },
+
+    GetAll: () => {
+        return data;
+    }
 }

@@ -59,16 +59,7 @@ app.use((err, req, res, next) => {
 })
 
 var server = createServer(app);
-const io = new require('socket.io')(server);
-io.on('connection', client => {
-    client.on('chanel1', data => {
-        console.log("connected");
-        io.emit('chanel1', data);
-    });
-    client.on('disconnect', () => {
-        
-    });
-})
+require('./ulliti/socket')(server);
 
 console.log(port, 1);
 server.listen(port, () => console.log(`Example app listening on port ${port}!`));
