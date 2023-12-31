@@ -20,7 +20,8 @@ class MyStrategy extends Strategy {
         // Call this.fail(info) if authentication fails
         const un = req.body[this.usernameField];
         const pw = req.body[this.passwordField];
-        this.verify(un, pw, (err, user) => {
+        //console.log(un, pw, options);
+        this.verify(un, pw, (err, user) => {            
             if (err) {
                 return(this.fail(err));
             }

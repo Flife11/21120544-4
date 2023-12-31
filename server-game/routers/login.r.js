@@ -6,7 +6,7 @@ const passport = require('passport')
 router.get('/', LoginRender);
 router.post('/', passport.authenticate('my', {
     failureRedirect: '/login'
-}) , (req, res) => {
+}) , (req, res) => {    
     res.redirect('/');
 });
 

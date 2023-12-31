@@ -1,39 +1,45 @@
 const db = require('../ulliti/db');
-const tbName = 'Users';
+//const tbName = 'Users';
+const getCol = ["Username", "Password", "Log", "Name", "Nickname", "Chesscolor", "Boardcolor", "Image"];
 module.exports = class User {
-    constructor(un, pw, log) {
-        this.Username = un;
-        this.Password = pw;
-        this.Log = log;
-        this.Name = '';
-        this.Email = '';
-        this.DOB = '';
-        this.Permission = '';
+    constructor(p) {
+        this.Username = p.Username;
+        this.Password = p.Password;
+        this.Log = p.Log;
+        this.Name = p.Name;
+        this.Nickname = p.Nickname;
+        this.Chesscolor = p.Chesscolor;
+        this.Boardcolor = p.Boardcolor;
+        this.Image = p.Image;
     }
 
     static checkExistsUser(user) {
-        const data = db.checkExist(tbName, 'Username', user.Username);
-        console.log(data)
+        const data = db.checkExist('Username', user.Username);
+        //console.log(data)
         return data;
     }
 
     static checkLogin(user) {
-        const data = db.Get(tbName, ['Username', 'Password'], ['Username'], [user.Username]);
+        const data = db.Get(['Username', 'Password'], ['Username'], [user.Username]);
         if (data.length==0) return null;
-        else return (new User(data[0].Username, data[0].Password));
+        else return (new User(data[0]));
     }
 
     static Get(values, cols) {
-        const data = db.Get(tbName, ['Username', 'Password', "Log"], cols, values);
+        const data = db.Get(getCol, cols, values);
         if (data.length==0) return null;
-        return (new User(data[0].Username, data[0].Password));
+        return (new User(data[0]));
     }
 
     static Add(user) {
-        db.Add(tbName, ['Username', 'Password', "Log"], user);
+        db.Add(['Username', 'Password', "Log"], user);
+    }
+
+    static Update(col, val, w_col, w_val) {
+        db.Update(col, val, w_col, w_val);
     }
 
     static UpdateSigninStatus(userCol, userVal) {
-        db.Update(tbname, ["Log"], [true], [userCol], [userVal]);
+        db.Update(["Log"], [true], [userCol], [userVal]);
     }
 }

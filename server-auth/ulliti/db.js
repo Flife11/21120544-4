@@ -1,11 +1,11 @@
 const FileSystem = require("fs");
-const data = require('../data.json');
+const data = require('../../data.json');
 
 module.exports = {
-    checkExist: (tbName, key, val) => {
-        try {
+    checkExist: (key, val) => {
+        try {            
             var flag = false;            
-            data[tbName].forEach(d => {
+            data.forEach(d => {
                 console.log(d[key], val, d[key]==val);
                 if (d[key]==val) {
                     flag = true;
@@ -18,9 +18,10 @@ module.exports = {
         }
     },
 
-    Get: (tbName, colName, W_colName, W_val) => {
+    Get: (colName, W_colName, W_val) => {
         const res = [];
-        data[tbName].forEach(d => {
+        console.log(colName, W_colName, W_val);
+        data.forEach(d => {
             var flag = 1;
         
             for (var index in W_colName) {
@@ -41,24 +42,25 @@ module.exports = {
                 res.push(tmp);
             }
         });
+        console.log(res, "res");
         return res;
     },
 
-    Add: (tbName, colName, val) => {            
+    Add: (colName, val) => {            
         const tmp = {}
         colName.forEach(key => {
             tmp[key] = val[key];
         })
-        data[tbName].push(tmp);        
+        data.push(tmp);        
         
         FileSystem.writeFile('./data.json', JSON.stringify(data), (error) => {
             if (error) throw error;
         });        
     },
 
-    Update: (tbName, col, val, w_col, w_val) => {
+    Update: (col, val, w_col, w_val) => {
         const res = [];
-        for (d of data[tbName]) {
+        for (d of data) {
             var flag = 1;
         
             for (var index in w_col) {                
@@ -70,13 +72,14 @@ module.exports = {
             }
             
             if (flag==1) {                
-                for (key of colName) {
-                    d[col] = val;
+                for (var index in col) {
+                    d[col[index]] = val[index];
                 }
             }
             res.push(d);
         }
-        
+        console.log(res);
+
         FileSystem.writeFile('./data.json', JSON.stringify(res), (error) => {
             if (error) throw error;
         }); 

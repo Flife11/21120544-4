@@ -2,7 +2,6 @@ const passport = require('passport');
 const { MyStrategy } = require('../ulliti/customPPS')
 const User = require('../models/user.m')
 const bcrypt = require('bcrypt');
-const { use } = require('../routers/login.r');
 
 passport.serializeUser((user, done) => {
     done(null, user.Username)

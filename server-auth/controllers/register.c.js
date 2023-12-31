@@ -2,16 +2,6 @@ const User = require('../models/user.m');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-const RegisterRender = async (req, res, next) => {
-    try {
-        res.render('register', {
-            pcss: () => 'css/loginCSS'
-        });
-    } catch (error) {
-        next(error);
-    }
-}
-
 const RegisterSubmit = async (req, res, next) => {
     try {
         const username = req.body.username;
@@ -37,4 +27,4 @@ const RegisterSubmit = async (req, res, next) => {
     }
 }
 
-module.exports = { RegisterRender, RegisterSubmit };
+module.exports = { RegisterSubmit };

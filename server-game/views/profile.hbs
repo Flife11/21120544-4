@@ -1,0 +1,103 @@
+<div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                <img class="rounded-circle mt-5" width="150px" src="{{Image}}"><span id="username"
+                    class="font-weight-bold">{{username}}</span>
+                <span>{{name}}</span>
+                <span><button id="change-avatar">Change avatar</button></span>
+            </div>
+        </div>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Profile</h4>
+                </div>
+                <form action="https://localhost:3003/update/profile" method="post" name="profile-file" id="profile-file"
+                    class="row mt-3">
+                    <input type="hidden" name="username" value="{{username}}">
+                    <div class="col-md-12"><label class="labels">Full Name</label>
+                        <input name="Name" type="text" class="form-control" placeholder="enter full name" value="{{Name}}">
+                    </div>
+                    <div class="col-md-12"><label class="labels">Nickname</label>
+                        <input name="Nickname" type="text" class="form-control" placeholder="enter nickname"
+                            value="{{Nickname}}">
+                    </div>
+                <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit">Save
+                        Profile</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{> notification}}
+
+<script>
+    $('#select-button').on('click', () => {
+        const url = $('#select-button').id;
+        const username = $('#username').text();
+        const rs = await fetch('https://localhost:3003/update/icon', {
+            method: 'post',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "Image": url,
+                "username": username
+            })
+        });
+    })
+
+    async function postFormDataAsJson({ url, formData }) {
+        const plainFormData = Object.fromEntries(formData.entries());
+        const formDataJsonString = JSON.stringify(plainFormData);
+
+        const fetchOptions = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            body: formDataJsonString,
+        };
+
+        const response = await fetch(url, fetchOptions);
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(errorMessage);
+        }
+
+        return response.json();
+    }
+
+    async function handleFormSubmit(event) {
+        event.preventDefault();
+
+        const form = event.currentTarget;
+        const url = form.action;
+
+        try {
+            const formData = new FormData(form);
+            const responseData = await postFormDataAsJson({ url, formData });   
+            if (responseData.code==1) {
+                window.location.href = 'http://localhost:21544/profile';
+            }
+        } catch (error) {
+            throw(error);
+        }
+    }
+
+    $("#profile-form").on("submit", handleFormSubmit);   
+
+
+    $('.change-avatar').on('click', () => {
+        const rs = fetch('https://localhost:3003/get/Image');
+        const data = rs.json();
+        var string = data.map(d => {
+            return `<li>${d}</li>`
+        }).join(' ');
+        $('#myModal').css('display', '');
+        $('#myModal').html(string);
+    })
+</script>

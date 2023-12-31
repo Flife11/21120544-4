@@ -3,7 +3,8 @@ const User = require('../models/user.m');
 const RegisterRender = async (req, res, next) => {
     try {
         res.render('register', {
-            pcss: () => 'css/loginCSS'
+            pcss: () => 'css/loginCSS',
+            chatCSS: () => 'css/emptyCSS',
         });
     } catch (error) {
         next(error);

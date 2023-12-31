@@ -51,17 +51,24 @@ router.get('/auth', async (req, res) => {
     if (User.checkExistsUser(new User(email, email))==true) {
         // Cập nhật trạng thái đăng nhập thành true
         User.UpdateSigninStatus([email], ["Username"]); 
-        res.redirect('http://localhost:3000/');
+        //res.redirect('http://localhost:3000/');
     }
     else {
         const HashPassword = await bcrypt.hash(email, saltRounds);
-        User.Add(new User(email, HashPassword));
+        User.Add(new User(email, HashPassword, false));        
     }
+    console.log(1);
+    const rs1 = await fetch('http://localhost:3000/login', {
+            method: 'post',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "username": email,
+                "password": email
+            })
+    });
     res.redirect('http://localhost:3000/');    
-})
-
-router.get('/logout', (req, res, next) => {    
-    res.redirect('https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=https://localhost:3000/login');
 })
 
 module.exports = router;
